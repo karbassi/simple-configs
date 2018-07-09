@@ -98,9 +98,20 @@ if has("gui_macvim")
     autocmd GUIEnter * set vb t_vb=
 endif
 
-
 " Add a bit extra margin to the left
 set foldcolumn=1
+
+" Toggle way to ignore / not ignore whitespaces in vimdiff
+if &diff
+    map gs :call IwhiteToggle()<CR>
+    function! IwhiteToggle()
+        if &diffopt =~ 'iwhite'
+            set diffopt-=iwhite
+        else
+            set diffopt+=iwhite
+        endif
+    endfunction
+endif
 
 
 " Colors and Fonts
