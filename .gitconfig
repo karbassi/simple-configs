@@ -1,0 +1,143 @@
+[alias]
+	# Shortcuts
+	br = branch
+	ci = commit -v
+	co = checkout
+	d = diff --word-diff
+	dc = diff --word-diff --cached
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr by %cn)%Creset' --abbrev-commit --date=relative
+	lgs = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr by %cn)%Creset' --abbrev-commit --date=relative --shortstat
+	s = stash
+	sa = stash apply
+	sl = stash list
+	sp = stash pop
+	st = status -sb
+	undo-commit = reset --soft HEAD^
+	# Multiple commands / patterns
+	contrib = !git shortlog -s -n | head -10
+	gi = "!gi() { curl -L -s https://www.gitignore.io/api/$@ ;}; gi"
+	svngrab = !git stash && git svn rebase && git stash apply
+	up = "!f() { git stash && git remote update && git checkout ${1:-master} && git rebase ${2:-origin}/${1:-master} ${1:-master} && git checkout - && git stash pop; }; f"
+	last = "!f() { git lgs -${1:-1} --relative-date --graph HEAD; }; f"
+	cleanup = "!f() { git branch --merged | grep -v '(^\\*\\|master\\|dev)' | xargs -n1 git branch -d ; git checkout -q master && git for-each-ref refs/heads/ \"--format=%(refname:short)\" | while read branch; do mergeBase=$(git merge-base master $branch) && [[ $(git cherry master $(git commit-tree $(git rev-parse $branch^{tree}) -p $mergeBase -m _)) == \"-\"* ]] && git branch -D $branch; done; }; f"
+	start = !git init . && git add -A && git commit --allow-empty -m \"Initialize repository\"
+
+[apply]
+	# Detect whitespace errors when applying a patch
+	whitespace = fix
+
+[commit]
+	# gpgsign = true
+
+[diff]
+	# Detect copies as well as renames
+	renames = copies
+	# Enable an experimental heuristic that shifts the hunk boundary in an
+	# attempt to make the resulting patch easier to read.
+	indentHeuristic = true
+
+[core]
+	compression = 9
+	autocrlf = input
+
+[pager]
+	# insanely beautiful diffs ==> npm install -g diff-so-fancy
+	# diff = diff-so-fancy | less --tabs=4 -RFX
+	# show = diff-so-fancy | less --tabs=4 -RFX
+
+[color]
+	ui = auto
+	status = auto
+	branch = auto
+	diff = auto
+
+[color "diff"]
+	meta = yellow bold
+	commit = green bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = "red bold 52"
+	newNormal = "green bold"
+	newHighlight = "green bold 22"
+
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan
+
+[merge]
+	tool = opendiff
+	renameLimit = 0
+	# Include summaries of merged commits in newly created merge commit messages
+	log = true
+
+# rewrites of repo paths
+#[url "git@github.com:"]
+#	insteadOf = "https://github.com/"
+#	pushInsteadOf = "github:"
+#	pushInsteadOf = "git://github.com/"
+#	pushInsteadOf = "https://github.com/"
+
+#[url "ssh://git@heroku.com/"]
+#	insteadOf = https://git.heroku.com/
+
+#[url "git://github.com/"]
+#	insteadOf = "github:"
+
+#[url "git@gist.github.com:"]
+#	pushInsteadOf = "gist:"
+#	pushInsteadOf = "git://gist.github.com/"
+
+#[url "git://gist.github.com/"]
+#	insteadOf = "gist:"
+
+#[url "https://github"]
+#	insteadOf = git://github
+
+# correct typos
+[help]
+	autocorrect = 1
+
+[branch]
+	autosetupmerge = true
+
+# push easily. http://stackoverflow.com/a/23918418/89484
+[push]
+	default = current
+	followTags = true
+
+[pull]
+	default = current
+
+[fetch]
+	prune = true
+
+[submodule]
+	fetchJobs = 8
+
+[rerere]
+	enabled = 1
+
+[credential]
+	helper = osxkeychain
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+# Don't use pager for stash
+[pager]
+	stash = false
+	branch = false
