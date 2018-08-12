@@ -12,13 +12,17 @@ eval "$(dircolors -b)"
 
 # Aliases
 # List Directory ---------------------------------------------------
-alias ls='ls $LS_OPTIONS -G'
+alias ls='ls $LS_OPTIONS'
 alias l='ls -lah'
 alias la='ls -lAh'
 alias ld='ls -ld -- */'
 alias ll='ls -lh'
 alias lla='ls -lah'
 alias lsa='ls -lah'
+
+if [ "$(uname)" == "Darwin" ]; then
+  alias ls='ls -G'
+fi
 
 # Navigation -------------------------------------------------------
 alias ..='cd ..'
@@ -34,6 +38,7 @@ alias df='df -h'
 
 # Tell grep to highlight matches and ignore version control files
 export GREP_OPTIONS='--color=auto --exclude="*\.svn*" --exclude="*\.git*"'
+alias grep='grep $GREP_OPTIONS'
 
 
 # Default editor: Code, then Sublime Text, then Nano
