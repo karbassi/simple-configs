@@ -1,3 +1,6 @@
+# Don't set any of this if prompt is not available
+[ -z "$PS1" ] && return
+
 # Set the username you don’t want to see in the prompt
 # local_username="karbassi"
 
